@@ -16,19 +16,36 @@ Quick start
         # The following apps are required:
         'django.contrib.auth',
         'django.contrib.messages',
-        'django.contrib.sites',
         ...
         'allauth',
+        'allauth.account',
         'allauth.socialaccount',
         'allauth.socialaccount.providers.openid_connect',
         'govbr_login',
     ]
 
-    SITE_ID = 1
+    # Visit https://docs.allauth.org/en/latest/installation/quickstart.html#quickstart for more details
 
-    # Visit https://django-allauth.readthedocs.io/en/latest/installation.html#django for more details
+2. Configure django middleware and authentication backend with allauth requirements in your setings like this::
 
-2. Include GovBr domain (staging or production) and paths to login services in your setings like this::
+    MIDDLEWARE = (
+        'django.middleware.common.CommonMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+
+        'allauth.account.middleware.AccountMiddleware',
+    )
+
+    AUTHENTICATION_BACKENDS = [
+        'django.contrib.auth.backends.ModelBackend',
+        'allauth.account.auth_backends.AuthenticationBackend',
+    ]
+
+    # Visit https://docs.allauth.org/en/latest/installation/quickstart.html#post-installation for more details
+
+3. Include GovBr domain (staging or production) and paths to login services in your setings like this::
 
     # GovBR client config
     SOCIALACCOUNT_GOVBR_SSO_DOMAIN = "https://sso.staging.acesso.gov.br"
@@ -39,13 +56,13 @@ Quick start
     # Visit GovBr tutorial (https://manual-roteiro-integracao-login-unico.servicos.gov.br/pt/stable/iniciarintegracao.html)
     # for more details about required domain and paths
 
-3. Run ``python manage.py migrate`` to create the allauth dependency models.
+4. Run ``python manage.py migrate`` to create the allauth dependency models.
 
-4. Start the development server and visit http://127.0.0.1:8000/admin/ (you'll need the Admin app enabled) to:
+5. Start the development server and visit http://127.0.0.1:8000/admin/ (you'll need the Admin app enabled) to:
 
    1. replace 'example.com' site with your url site;
    2. create a SocialApp with GovBr Provider and your url site defined in previous step.
 
  See tutorial to know how to request client_id and secret_id: https://manual-roteiro-integracao-login-unico.servicos.gov.br/pt/stable/solicitarconfiguracao.html
 
-5. Visit http://127.0.0.1:8000/accounts/govbr/login/ to use your govbr login.
+6. Visit http://127.0.0.1:8000/accounts/govbr/login/ to use your govbr login.
